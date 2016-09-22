@@ -1,0 +1,38 @@
+body {
+  color: #333;
+}
+
+.sidebar {
+  background: #eee;
+  border-right: 2px solid #888;
+  position: fixed;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  width: 200px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  text-align: center;
+}
+
+.menu {
+  list-style-type: none;
+  padding: 0;
+}
+
+.menu-item:hover {
+  background-color: #ddd;
+}
+
+.menu-item a {
+  color: #333;
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+}
+
+.content {
+  margin-left: 200px;
+  overflow: hidden;
+  padding: 35px;
+}

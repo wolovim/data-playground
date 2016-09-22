@@ -1,10 +1,15 @@
 <!doctype html>
 <title>DataPlayground</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 <div class="page">
-  <h1>[ DataPlayground ]</h1>
-  <ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="/titanic">Titanic</a></li>
-  </ul>
-  {% block body %}{% endblock %}
+  <div class="sidebar">
+    <h3 class="title">[ DataPlayground ]</h3>
+    <ul class="menu">
+      <li class="menu-item"><a href="/">Home</a></li>
+      <li class="menu-item"><a href="/titanic">Titanic</a></li>
+    </ul>
+  </div>
+  <div class="content">
+    {% block body %}{% endblock %}
+  </div>
 </div>
