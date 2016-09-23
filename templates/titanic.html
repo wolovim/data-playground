@@ -10,5 +10,16 @@
       <code class="snippet">titanic_df.head()</code>
       {{ df.head().to_html() | safe }}
     </div>
+
+    <div>
+      <h3>Who were the passengers?</h3>
+      We'll use Matplotlib and Seaborn to shed some light on who was aboard the Titanic:
+      <code class="snippet">
+        import seaborn as sns<br />
+        sns.factorplot('Sex', data=titanic_df, kind='count')
+      </code>
+      <img src="{{ url_for('static', filename='titanic/gender.png') }}" height="300">
+    </div>
+
   </div>
 {% endblock %}

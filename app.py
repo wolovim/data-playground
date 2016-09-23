@@ -1,8 +1,15 @@
 from flask import Flask, render_template
 import pandas as pd
-from pandas import Series, DataFrame
+import seaborn as sns
+
 
 app = Flask(__name__)
+titanic_df = pd.read_csv('./data/titanic-training-set.csv')
+
+def build_titanic_genders():
+  sns.set(font="serif")
+  plot = sns.factorplot('Sex', data=titanic_df, kind='count')
+  plot.fig.savefig("static/titanic/gender.png")
 
 @app.route('/')
 def index():
@@ -10,7 +17,7 @@ def index():
 
 @app.route('/titanic')
 def titanic():
-  titanic_df = pd.read_csv('./data/titanic-training-set.csv')
+  build_titanic_genders()
   return render_template('titanic.html', df=titanic_df)
 
 if __name__ == '__main__':
