@@ -24,5 +24,14 @@ def build_titanic_demographics():
   plot_2 = sns.factorplot('Pclass', data=titanic_df, hue='Sex', kind='count', legend_out=False)
   plot_2.fig.savefig('static/titanic/class.png')
 
+  # Add a column to identify male, female, or child
+  titanic_df['person'] = titanic_df[['Age', 'Sex']].apply(identify_children, axis=1)
+  plot_3 = sns.factorplot('Pclass', data=titanic_df, hue='person', kind='count', legend_out=False)
+  plot_3.fig.savefig('static/titanic/class-with-child.png')
+
+def identify_children(passenger):
+  age,sex = passenger
+  return 'child' if age < 16 else sex
+
 if __name__ == '__main__':
   app.run()

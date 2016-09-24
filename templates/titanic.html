@@ -4,11 +4,12 @@
     <h2>Titanic</h2>
 
     <div>
-      The dataset lives in <code>/data</code>, so we'll import it with pandas:
+      <p>The dataset lives in <code>/data</code>, so we'll import it with pandas:</p>
       <code class="snippet">titanic_df = pd.read_csv('./data/titanic-training-set.csv')</code>
-      Then display a preview of the data with:
+      <p>Then display a preview of the data with:</p>
       <code class="snippet">titanic_df.head()</code>
-      {{ df.head().to_html() | safe }}
+      <!-- We drop the person column here, because we pretend to create it later -->
+      {{ df.drop('person', axis=1).head().to_html() | safe }}
     </div>
 
     <div>
@@ -30,7 +31,23 @@
         sns.factorplot('Pclass', data=titanic_df, hue='Sex', kind='count', legend_out=False)
       </code>
       <img src="{{ url_for('static', filename='titanic/class.png') }}" height="300">
-    </div>
 
+      <p>
+        In order to vizualize how many children were on board, we'll add another column to identify
+        the passenger as male, female or child, with children being anyone under the age of 16.
+      </p>
+      <code class="snippet">
+        def identify_children(passenger):<br />
+        &nbsp;&nbsp;age,sex = passenger<br />
+        &nbsp;&nbsp;return 'child' if age < 16 else sex
+        <br /><br />
+        titanic_df['person'] = titanic_df[['Age', 'Sex']].apply(identify_children, axis=1)
+      </code>
+      <p>To view the changes, we can display the first ten rows:</p>
+      <code class="snippet">titanic_df[1:10]</code>
+      {{ df[1:10].to_html() | safe }}
+      <p>Again, the same factorplot with the <code>hue</code> set to <code>person</code>:</p>
+      <img src="{{ url_for('static', filename='titanic/class-with-child.png') }}" height="300">
+    </div>
   </div>
 {% endblock %}
