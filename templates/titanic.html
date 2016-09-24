@@ -13,12 +13,23 @@
 
     <div>
       <h3>Who were the passengers?</h3>
-      We'll use Matplotlib and Seaborn to shed some light on who was aboard the Titanic:
+      <p>
+        We'll use matplotlib and seaborn to shed some light on who was aboard the Titanic.
+        First, what was the gender breakdown?
+      </p>
       <code class="snippet">
         import seaborn as sns<br />
         sns.factorplot('Sex', data=titanic_df, kind='count')
       </code>
       <img src="{{ url_for('static', filename='titanic/gender.png') }}" height="300">
+
+      <p>
+        There were three classes of passengers aboard. How were the genders distributed across them?
+      </p>
+      <code class="snippet">
+        sns.factorplot('Pclass', data=titanic_df, hue='Sex', kind='count', legend_out=False)
+      </code>
+      <img src="{{ url_for('static', filename='titanic/class.png') }}" height="300">
     </div>
 
   </div>
