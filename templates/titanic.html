@@ -33,7 +33,7 @@
       <img src="{{ url_for('static', filename='titanic/class.png') }}" height="300">
 
       <p>
-        In order to vizualize how many children were on board, we'll add another column to identify
+        In order to visualize how many children were on board, we'll add another column to identify
         the passenger as male, female or child, with children being anyone under the age of 16.
       </p>
       <code class="snippet">
@@ -48,6 +48,40 @@
       {{ df[1:10].to_html() | safe }}
       <p>Again, the same factorplot with the <code>hue</code> set to <code>person</code>:</p>
       <img src="{{ url_for('static', filename='titanic/class-with-child.png') }}" height="300">
+
+      <p>Let's take a look at the age distribution of each group:</p>
+      <code class="snippet">
+        fig = sns.FacetGrid(titanic_df, hue="person", aspect=4)<br />
+        fig.map(sns.kdeplot, 'Age', shade=True)<br />
+        oldest = titanic_df['Age'].max()<br />
+        fig.set(xlim=(0, oldest))<br />
+        fig.add_legend()
+      </code>
+      <img src="{{ url_for('static', filename='titanic/age-dist-gender.png') }}" width="100%">
+
+      <p>Similarly, we can view the age distribution by passenger class:</p>
+      <img src="{{ url_for('static', filename='titanic/age-dist-class.png') }}" width="100%">
+
+      <p>
+        We've got data on the deck that each passenger stayed on, so let's visualize that.
+        Empty cabin values will have to get discarded, then we'll want to create a new DataFrame
+        with just the letter value of the cabin.
+      </p>
+      <code class="snippet">
+        ...<br />
+        from pandas import DataFrame<br />
+        ...<br />
+        <br />
+        deck = titanic_df['Cabin'].dropna()<br />
+        levels = []<br />
+        for level in deck:<br />
+        &nbsp;&nbsp;levels.append(level[0])<br />
+        <br />
+        cabin_df = DataFrame(levels)<br />
+        cabin_df.columns = ['Cabin']<br />
+        sns.factorplot('Cabin', data=cabin_df, kind='count', palette='winter_d')
+      </code>
+      <img src="{{ url_for('static', filename='titanic/deck-dist.png') }}" height="300">
     </div>
   </div>
 {% endblock %}

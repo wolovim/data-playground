@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 import pandas as pd
+from pandas import DataFrame
 import seaborn as sns
 
 
@@ -28,6 +29,33 @@ def build_titanic_demographics():
   titanic_df['person'] = titanic_df[['Age', 'Sex']].apply(identify_children, axis=1)
   plot_3 = sns.factorplot('Pclass', data=titanic_df, hue='person', kind='count', legend_out=False)
   plot_3.fig.savefig('static/titanic/class-with-child.png')
+
+  # FacetGrid for age distribution by gender
+  plot_4 = sns.FacetGrid(titanic_df, hue="person",aspect=4)
+  plot_4.map(sns.kdeplot, 'Age', shade=True)
+  oldest = titanic_df['Age'].max()
+  plot_4.set(xlim=(0,oldest))
+  plot_4.add_legend()
+  plot_4.fig.savefig('static/titanic/age-dist-gender.png')
+
+  # Age distributions by class
+  plot_5 = sns.FacetGrid(titanic_df, hue="Pclass",aspect=4)
+  plot_5.map(sns.kdeplot, 'Age', shade=True)
+  oldest = titanic_df['Age'].max()
+  plot_5.set(xlim=(0,oldest))
+  plot_5.add_legend()
+  plot_5.fig.savefig('static/titanic/age-dist-class.png')
+
+  # Distribution by deck
+  deck = titanic_df['Cabin'].dropna()
+  levels = []
+  for level in deck:
+    levels.append(level[0])
+  cabin_df = DataFrame(levels)
+  cabin_df.columns = ['Cabin']
+  x_order = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+  plot_6 = sns.factorplot('Cabin', data=cabin_df, x_order=x_order, kind='count', palette='winter_d')
+  plot_6.fig.savefig('static/titanic/deck-dist')
 
 def identify_children(passenger):
   age,sex = passenger
