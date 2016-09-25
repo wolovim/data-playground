@@ -82,6 +82,19 @@
         sns.factorplot('Cabin', data=cabin_df, kind='count', palette='winter_d')
       </code>
       <img src="{{ url_for('static', filename='titanic/deck-dist.png') }}" height="300">
+
+      <p>
+        How many of the travelers had family on board?
+        If the Parch (parents/children) and SibSp (siblings/spouse) columns are zero, then
+        the traveler was alone:
+      </p>
+      <code class="snippet">
+        titanic_df['Alone'] = titanic_df.Parch + titanic_df.SibSp<br />
+        titanic_df['Alone'].loc[titanic_df['Alone'] > 0] = 'Family'<br />
+        titanic_df['Alone'].loc[titanic_df['Alone'] == 0] = 'Alone'<br />
+        sns.factorplot('Alone', data=titanic_df, kind='count')
+      </code>
+      <img src="{{ url_for('static', filename='titanic/family.png') }}" height="300">
     </div>
   </div>
 {% endblock %}

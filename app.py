@@ -55,7 +55,14 @@ def build_titanic_demographics():
   cabin_df.columns = ['Cabin']
   x_order = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
   plot_6 = sns.factorplot('Cabin', data=cabin_df, x_order=x_order, kind='count', palette='winter_d')
-  plot_6.fig.savefig('static/titanic/deck-dist')
+  plot_6.fig.savefig('static/titanic/deck-dist.png')
+
+  # Passengers with family
+  titanic_df['Alone'] = titanic_df.Parch + titanic_df.SibSp
+  titanic_df['Alone'].loc[titanic_df['Alone'] > 0] = 'Family'
+  titanic_df['Alone'].loc[titanic_df['Alone'] == 0] = 'Alone'
+  plot_7 = sns.factorplot('Alone', data=titanic_df, kind='count')
+  plot_7.fig.savefig('static/titanic/family.png')
 
 def identify_children(passenger):
   age,sex = passenger
