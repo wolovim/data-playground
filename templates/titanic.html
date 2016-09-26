@@ -139,9 +139,15 @@
 
       <p>What's the impact of having family members on board?</p>
       <code class="snippet">
-        sns.lmplot('Alone', 'Survived', data=titanic_df)
+        sns.factorplot('Alone', 'Survived', data=titanic_df)
       </code>
       <img src="{{ url_for('static', filename='titanic/survival-family.png') }}">
+
+      <p>How did a passenger's deck level affect the survival rate?</p>
+      <code class="snippet">
+        sns.factorplot('Deck', 'Survived', data=titanic_df, join=False)
+      </code>
+      <img src="{{ url_for('static', filename='titanic/survival-deck.png') }}">
     </div>
   </div>
 {% endblock %}
