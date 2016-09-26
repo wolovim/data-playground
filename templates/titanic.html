@@ -8,8 +8,8 @@
       <code class="snippet">titanic_df = pd.read_csv('./data/titanic-training-set.csv')</code>
       <p>Then display a preview of the data with:</p>
       <code class="snippet">titanic_df.head()</code>
-      <!-- We drop the Person column here, because we pretend to create it later -->
-      {{ df.drop('Person', axis=1).head().to_html() | safe }}
+      <!-- We drop some columns here, because we pretend to create them later -->
+      {{ df.drop(['Person', 'Alone', 'Survivor'], axis=1).head().to_html() | safe }}
     </div>
 
     <div>
@@ -45,7 +45,7 @@
       </code>
       <p>To view the changes, we can display the first ten rows:</p>
       <code class="snippet">titanic_df[1:10]</code>
-      {{ df[1:10].to_html() | safe }}
+      {{ df[1:10].drop(['Alone', 'Survivor'], axis=1).to_html() | safe }}
       <p>Again, the same factorplot with the <code>hue</code> set to <code>Person</code>:</p>
       <img src="{{ url_for('static', filename='titanic/class-with-child.png') }}" height="300">
 
