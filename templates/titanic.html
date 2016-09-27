@@ -1,153 +1,173 @@
 {% extends "layout.html" %}
 {% block body %}
   <div>
-    <h2>Titanic</h2>
+    <h1>Titanic</h1>
 
-    <div>
-      <p>The dataset lives in <code>/data</code>, so we'll import it with pandas:</p>
-      <code class="snippet">titanic_df = pd.read_csv('./data/titanic-training-set.csv')</code>
-      <p>Then display a preview of the data with:</p>
-      <code class="snippet">titanic_df.head()</code>
-      <!-- We drop some columns here, because we pretend to create them later -->
-      {{ df.drop(['Person', 'Alone', 'Survivor', 'Deck'], axis=1).head().to_html() | safe }}
-    </div>
+    <!--Introduction-->
+    <p>
+      The goal is to use a dataset with information about the passengers of the Titanic to
+      draw some conclusions about who was on board and what made someone more likely to survive
+      the sinking. This dataset comes from <a href="http://www.kaggle.com/c/titanic">kaggle</a>
+      (and is available for free if you create an account), but the content of this data analysis
+      is largely taken from a
+      <a href="https://www.udemy.com/learning-python-for-data-analysis-and-visualization/">
+      python data analysis course</a> by Jose Portilla on Udemy.
+    </p>
 
-    <div>
-      <h3>Who were the passengers?</h3>
-      <p>
-        We'll use matplotlib and seaborn to shed some light on who was aboard the Titanic.
-        First, what was the gender breakdown?
-      </p>
-      <code class="snippet">
-        import seaborn as sns<br />
-        sns.factorplot('Sex', data=titanic_df, kind='count')
-      </code>
-      <img src="{{ url_for('static', filename='titanic/gender.png') }}">
+    <!--Data import and preview-->
+    <p>In this application, the dataset lives in <code>/data</code>, so we'll import it with pandas:</p>
+    <code class="snippet">
+      import pandas as pd<br />
+      titanic_df = pd.read_csv('./data/titanic-training-set.csv')
+    </code>
+    <p>Then display a preview of the data with:</p>
+    <code class="snippet">titanic_df.head()</code>
+    <!-- Note: we drop some columns here, because we pretend to create them later -->
+    {{ df.drop(['Person', 'Alone', 'Survivor', 'Deck'], axis=1).head().to_html() | safe }}
+    <p>
+      This gives us an idea of the data we're working with. Some of the columns names are not obvious:
+      <ul>
+        <li><code>Pclass</code>: the passenger class; a number 1-3</li>
+        <li><code>SibSp</code>: the number of siblings + spouse on board</li>
+        <li><code>Parch</code>: the number of parents + children on board</li>
+        <li><code>Embarked</code>: the letter is the first name of a city</li>
+      </ul>
+    </p>
 
-      <p>
-        There were three classes of passengers aboard. How were the genders distributed across them?
-      </p>
-      <code class="snippet">
-        sns.factorplot('Pclass', data=titanic_df, hue='Sex', kind='count', legend_out=False)
-      </code>
-      <img src="{{ url_for('static', filename='titanic/class.png') }}">
+    <h3>Who were the passengers?</h3>
+    <p>
+      We'll use matplotlib and seaborn to shed some light on who was aboard the Titanic.
+      First, what was the gender breakdown?
+    </p>
+    <code class="snippet">
+      import seaborn as sns<br />
+      sns.factorplot('Sex', data=titanic_df, kind='count')
+    </code>
+    <img src="{{ url_for('static', filename='titanic/gender.png') }}">
 
-      <p>
-        In order to visualize how many children were on board, we'll add another column to identify
-        the passenger as male, female or child, with children being anyone under the age of 16.
-      </p>
-      <code class="snippet">
-        def identify_children(passenger):<br />
-        &nbsp;&nbsp;age,sex = passenger<br />
-        &nbsp;&nbsp;return 'child' if age < 16 else sex
-        <br /><br />
-        titanic_df['Person'] = titanic_df[['Age', 'Sex']].apply(identify_children, axis=1)
-      </code>
-      <p>To view the changes, we can display the first ten rows:</p>
-      <code class="snippet">titanic_df[1:10]</code>
-      {{ df[1:10].drop(['Alone', 'Survivor', 'Deck'], axis=1).to_html() | safe }}
-      <p>Again, the same factorplot with the <code>hue</code> set to <code>Person</code>:</p>
-      <img src="{{ url_for('static', filename='titanic/class-with-child.png') }}">
+    <p>
+      There were three classes of passengers aboard. How were the genders distributed across them?
+    </p>
+    <code class="snippet">
+      sns.factorplot('Pclass', data=titanic_df, hue='Sex', kind='count', legend_out=False)
+    </code>
+    <img src="{{ url_for('static', filename='titanic/class.png') }}">
 
-      <p>Let's take a look at the age distribution of each group:</p>
-      <code class="snippet">
-        fig = sns.FacetGrid(titanic_df, hue="Person", aspect=4)<br />
-        fig.map(sns.kdeplot, 'Age', shade=True)<br />
-        oldest = titanic_df['Age'].max()<br />
-        fig.set(xlim=(0, oldest))<br />
-        fig.add_legend()
-      </code>
-      <img src="{{ url_for('static', filename='titanic/age-dist-gender.png') }}" width="100%">
+    <p>
+      In order to visualize how many children were on board, we'll add another column to identify
+      the passenger as male, female or child, with children being anyone under the age of 16.
+    </p>
+    <code class="snippet">
+      def identify_children(passenger):<br />
+      &nbsp;&nbsp;age,sex = passenger<br />
+      &nbsp;&nbsp;return 'child' if age < 16 else sex
+      <br /><br />
+      titanic_df['Person'] = titanic_df[['Age', 'Sex']].apply(identify_children, axis=1)
+    </code>
+    <p>To view the changes, we can display the first ten rows:</p>
+    <code class="snippet">titanic_df[1:10]</code>
+    {{ df[1:10].drop(['Alone', 'Survivor', 'Deck'], axis=1).to_html() | safe }}
+    <p>Again, the same factorplot with the <code>hue</code> set to <code>Person</code>:</p>
+    <img src="{{ url_for('static', filename='titanic/class-with-child.png') }}">
 
-      <p>Similarly, we can view the age distribution by passenger class:</p>
-      <img src="{{ url_for('static', filename='titanic/age-dist-class.png') }}" width="100%">
+    <p>Let's take a look at the age distribution of each group:</p>
+    <code class="snippet">
+      fig = sns.FacetGrid(titanic_df, hue="Person", aspect=4)<br />
+      fig.map(sns.kdeplot, 'Age', shade=True)<br />
+      oldest = titanic_df['Age'].max()<br />
+      fig.set(xlim=(0, oldest))<br />
+      fig.add_legend()
+    </code>
+    <img src="{{ url_for('static', filename='titanic/age-dist-gender.png') }}" width="100%">
 
-      <p>
-        We've got data on the deck that each passenger stayed on, so let's visualize that.
-        Empty cabin values will have to get discarded, then we'll want to create a new DataFrame
-        with just the letter value of the cabin.
-      </p>
-      <code class="snippet">
-        ...<br />
-        from pandas import DataFrame<br />
-        ...<br />
-        <br />
-        deck = titanic_df['Cabin'].dropna()<br />
-        levels = []<br />
-        for level in deck:<br />
-        &nbsp;&nbsp;levels.append(level[0])<br />
-        <br />
-        cabin_df = DataFrame(levels)<br />
-        cabin_df.columns = ['Cabin']<br />
-        sns.factorplot('Cabin', data=cabin_df, kind='count', palette='winter_d')
-      </code>
-      <img src="{{ url_for('static', filename='titanic/deck-dist.png') }}">
+    <p>Similarly, we can view the age distribution by passenger class:</p>
+    <img src="{{ url_for('static', filename='titanic/age-dist-class.png') }}" width="100%">
 
-      <p>
-        How many of the travelers had family on board?
-        If the Parch (parents/children) and SibSp (siblings/spouse) columns are zero, then
-        the traveler was alone:
-      </p>
-      <code class="snippet">
-        titanic_df['Alone'] = titanic_df.Parch + titanic_df.SibSp<br />
-        titanic_df['Alone'].loc[titanic_df['Alone'] > 0] = 'Family'<br />
-        titanic_df['Alone'].loc[titanic_df['Alone'] == 0] = 'Alone'<br />
-        sns.factorplot('Alone', data=titanic_df, kind='count')
-      </code>
-      <img src="{{ url_for('static', filename='titanic/family.png') }}">
+    <p>
+      We've got data on the deck that each passenger stayed on, so let's visualize that.
+      Empty cabin values will have to get discarded, then we'll want to create a new DataFrame
+      with just the letter value of the cabin.
+    </p>
+    <code class="snippet">
+      ...<br />
+      from pandas import DataFrame<br />
+      ...<br />
+      <br />
+      deck = titanic_df['Cabin'].dropna()<br />
+      levels = []<br />
+      for level in deck:<br />
+      &nbsp;&nbsp;levels.append(level[0])<br />
+      <br />
+      cabin_df = DataFrame(levels)<br />
+      cabin_df.columns = ['Cabin']<br />
+      sns.factorplot('Cabin', data=cabin_df, kind='count', palette='winter_d')
+    </code>
+    <img src="{{ url_for('static', filename='titanic/deck-dist.png') }}">
 
-      <p>How many survivors were there?</p>
-      <code class="snippet">
-        titanic_df["Survivor"] = titanic_df.Survived.map({0: "no", 1: "yes"})<br />
-        sns.factorplot('Survivor', data=titanic_df, kind='count')
-      </code>
-      <img src="{{ url_for('static', filename='titanic/survival-rate.png') }}">
+    <p>
+      How many of the travelers had family on board?
+      If the Parch (parents/children) and SibSp (siblings/spouse) columns are zero, then
+      the traveler was alone:
+    </p>
+    <code class="snippet">
+      titanic_df['Alone'] = titanic_df.Parch + titanic_df.SibSp<br />
+      titanic_df['Alone'].loc[titanic_df['Alone'] > 0] = 'Family'<br />
+      titanic_df['Alone'].loc[titanic_df['Alone'] == 0] = 'Alone'<br />
+      sns.factorplot('Alone', data=titanic_df, kind='count')
+    </code>
+    <img src="{{ url_for('static', filename='titanic/family.png') }}">
 
-      <p>What influenced the survival rate? Let's start by looking at the ticket class.</p>
-      <code class="snippet">
-        sns.factorplot('Pclass', 'Survived', data=titanic_df)
-      </code>
-      <img src="{{ url_for('static', filename='titanic/survival-class.png') }}">
+    <p>How many survivors were there?</p>
+    <code class="snippet">
+      titanic_df["Survivor"] = titanic_df.Survived.map({0: "no", 1: "yes"})<br />
+      sns.factorplot('Survivor', data=titanic_df, kind='count')
+    </code>
+    <img src="{{ url_for('static', filename='titanic/survival-rate.png') }}">
 
-      <p>
-        Looks like higher your class, the more likely you were to survive. If you recall, the
-        third class was mostly men. Did the "women and children first" policy influence this?
-      </p>
-      <code class="snippet">
-        sns.factorplot('Pclass', 'Survived', data=titanic_df, hue='Person')
-      </code>
-      <img src="{{ url_for('static', filename='titanic/survival-class-gender.png') }}">
+    <p>What influenced the survival rate? Let's start by looking at the ticket class.</p>
+    <code class="snippet">
+      sns.factorplot('Pclass', 'Survived', data=titanic_df)
+    </code>
+    <img src="{{ url_for('static', filename='titanic/survival-class.png') }}">
 
-      <p>Doesn't look so hot for men or anyone in third class. Does passenger age make a difference?</p>
-      <code class="snippet">
-        sns.lmplot('Age', 'Survived', data=titanic_df)
-      </code>
-      <img src="{{ url_for('static', filename='titanic/survival-age.png') }}">
+    <p>
+      Looks like higher your class, the more likely you were to survive. If you recall, the
+      third class was mostly men. Did the "women and children first" policy influence this?
+    </p>
+    <code class="snippet">
+      sns.factorplot('Pclass', 'Survived', data=titanic_df, hue='Person')
+    </code>
+    <img src="{{ url_for('static', filename='titanic/survival-class-gender.png') }}">
 
-      <p>What if we throw class into the mix?</p>
-      <code class="snippet">
-        sns.lmplot('Age', 'Survived', data=titanic_df, hue='Pclass', x_bins=[10, 20, 40, 60, 80], palette='winter')
-      </code>
-      <img src="{{ url_for('static', filename='titanic/survival-age-class.png') }}">
-      <p>While there's quite a lot of variance, in general, it seems you're better off the younger you are.
+    <p>Doesn't look so hot for men or anyone in third class. Does passenger age make a difference?</p>
+    <code class="snippet">
+      sns.lmplot('Age', 'Survived', data=titanic_df)
+    </code>
+    <img src="{{ url_for('static', filename='titanic/survival-age.png') }}">
 
-      <p>What's the difference in age by gender?</p>
-      <code class="snippet">
-        sns.lmplot('Age', 'Survived', data=titanic_df, hue='Sex', x_bins=[10, 20, 40, 60, 80], palette='winter')
-      </code>
-      <img src="{{ url_for('static', filename='titanic/survival-age-gender.png') }}">
+    <p>What if we throw class into the mix?</p>
+    <code class="snippet">
+      sns.lmplot('Age', 'Survived', data=titanic_df, hue='Pclass', x_bins=[10, 20, 40, 60, 80], palette='winter')
+    </code>
+    <img src="{{ url_for('static', filename='titanic/survival-age-class.png') }}">
+    <p>While there's quite a lot of variance, in general, it seems you're better off the younger you are.
 
-      <p>What's the impact of having family members on board?</p>
-      <code class="snippet">
-        sns.factorplot('Alone', 'Survived', data=titanic_df)
-      </code>
-      <img src="{{ url_for('static', filename='titanic/survival-family.png') }}">
+    <p>What's the difference in age by gender?</p>
+    <code class="snippet">
+      sns.lmplot('Age', 'Survived', data=titanic_df, hue='Sex', x_bins=[10, 20, 40, 60, 80], palette='winter')
+    </code>
+    <img src="{{ url_for('static', filename='titanic/survival-age-gender.png') }}">
 
-      <p>How did a passenger's deck level affect the survival rate?</p>
-      <code class="snippet">
-        sns.factorplot('Deck', 'Survived', data=titanic_df, join=False)
-      </code>
-      <img src="{{ url_for('static', filename='titanic/survival-deck.png') }}">
-    </div>
+    <p>What's the impact of having family members on board?</p>
+    <code class="snippet">
+      sns.factorplot('Alone', 'Survived', data=titanic_df)
+    </code>
+    <img src="{{ url_for('static', filename='titanic/survival-family.png') }}">
+
+    <p>How did a passenger's deck level affect the survival rate?</p>
+    <code class="snippet">
+      sns.factorplot('Deck', 'Survived', data=titanic_df, join=False)
+    </code>
+    <img src="{{ url_for('static', filename='titanic/survival-deck.png') }}">
   </div>
 {% endblock %}
