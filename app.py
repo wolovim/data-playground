@@ -54,7 +54,7 @@ def build_titanic_demographics():
   cabin_df = DataFrame(levels)
   cabin_df.columns = ['Cabin']
   generations = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
-  plot_6 = sns.factorplot('Cabin', data=cabin_df, x_order=generations, kind='count', palette='winter_d')
+  plot_6 = sns.factorplot('Cabin', data=cabin_df, order=generations, kind='count', palette='winter_d')
   plot_6.fig.savefig('static/titanic/deck-dist.png')
 
   # Passengers with family
@@ -96,7 +96,7 @@ def build_titanic_demographics():
 
   # Survival rate: deck
   titanic_df['Deck'] = titanic_df.Cabin.str[0]
-  plot_15 = sns.factorplot('Deck', 'Survived', data=titanic_df, x_order=generations, join=False)
+  plot_15 = sns.factorplot('Deck', 'Survived', data=titanic_df, order=generations, join=False)
   plot_15.fig.savefig('static/titanic/survival-deck.png')
 
 def identify_children(passenger):

@@ -9,7 +9,7 @@
       <p>Then display a preview of the data with:</p>
       <code class="snippet">titanic_df.head()</code>
       <!-- We drop some columns here, because we pretend to create them later -->
-      {{ df.drop(['Person', 'Alone', 'Survivor'], axis=1).head().to_html() | safe }}
+      {{ df.drop(['Person', 'Alone', 'Survivor', 'Deck'], axis=1).head().to_html() | safe }}
     </div>
 
     <div>
@@ -22,7 +22,7 @@
         import seaborn as sns<br />
         sns.factorplot('Sex', data=titanic_df, kind='count')
       </code>
-      <img src="{{ url_for('static', filename='titanic/gender.png') }}" height="300">
+      <img src="{{ url_for('static', filename='titanic/gender.png') }}">
 
       <p>
         There were three classes of passengers aboard. How were the genders distributed across them?
@@ -30,7 +30,7 @@
       <code class="snippet">
         sns.factorplot('Pclass', data=titanic_df, hue='Sex', kind='count', legend_out=False)
       </code>
-      <img src="{{ url_for('static', filename='titanic/class.png') }}" height="300">
+      <img src="{{ url_for('static', filename='titanic/class.png') }}">
 
       <p>
         In order to visualize how many children were on board, we'll add another column to identify
@@ -45,9 +45,9 @@
       </code>
       <p>To view the changes, we can display the first ten rows:</p>
       <code class="snippet">titanic_df[1:10]</code>
-      {{ df[1:10].drop(['Alone', 'Survivor'], axis=1).to_html() | safe }}
+      {{ df[1:10].drop(['Alone', 'Survivor', 'Deck'], axis=1).to_html() | safe }}
       <p>Again, the same factorplot with the <code>hue</code> set to <code>Person</code>:</p>
-      <img src="{{ url_for('static', filename='titanic/class-with-child.png') }}" height="300">
+      <img src="{{ url_for('static', filename='titanic/class-with-child.png') }}">
 
       <p>Let's take a look at the age distribution of each group:</p>
       <code class="snippet">
@@ -81,7 +81,7 @@
         cabin_df.columns = ['Cabin']<br />
         sns.factorplot('Cabin', data=cabin_df, kind='count', palette='winter_d')
       </code>
-      <img src="{{ url_for('static', filename='titanic/deck-dist.png') }}" height="300">
+      <img src="{{ url_for('static', filename='titanic/deck-dist.png') }}">
 
       <p>
         How many of the travelers had family on board?
@@ -94,20 +94,20 @@
         titanic_df['Alone'].loc[titanic_df['Alone'] == 0] = 'Alone'<br />
         sns.factorplot('Alone', data=titanic_df, kind='count')
       </code>
-      <img src="{{ url_for('static', filename='titanic/family.png') }}" height="300">
+      <img src="{{ url_for('static', filename='titanic/family.png') }}">
 
       <p>How many survivors were there?</p>
       <code class="snippet">
         titanic_df["Survivor"] = titanic_df.Survived.map({0: "no", 1: "yes"})<br />
         sns.factorplot('Survivor', data=titanic_df, kind='count')
       </code>
-      <img src="{{ url_for('static', filename='titanic/survival-rate.png') }}" height="300">
+      <img src="{{ url_for('static', filename='titanic/survival-rate.png') }}">
 
       <p>What influenced the survival rate? Let's start by looking at the ticket class.</p>
       <code class="snippet">
         sns.factorplot('Pclass', 'Survived', data=titanic_df)
       </code>
-      <img src="{{ url_for('static', filename='titanic/survival-class.png') }}" height="300">
+      <img src="{{ url_for('static', filename='titanic/survival-class.png') }}">
 
       <p>
         Looks like higher your class, the more likely you were to survive. If you recall, the
@@ -116,13 +116,13 @@
       <code class="snippet">
         sns.factorplot('Pclass', 'Survived', data=titanic_df, hue='Person')
       </code>
-      <img src="{{ url_for('static', filename='titanic/survival-class-gender.png') }}" height="300">
+      <img src="{{ url_for('static', filename='titanic/survival-class-gender.png') }}">
 
       <p>Doesn't look so hot for men or anyone in third class. Does passenger age make a difference?</p>
       <code class="snippet">
         sns.lmplot('Age', 'Survived', data=titanic_df)
       </code>
-      <img src="{{ url_for('static', filename='titanic/survival-age.png') }}" height="300">
+      <img src="{{ url_for('static', filename='titanic/survival-age.png') }}">
 
       <p>What if we throw class into the mix?</p>
       <code class="snippet">
