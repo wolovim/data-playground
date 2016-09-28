@@ -115,52 +115,58 @@
 
     <h3>How many survivors were there?</h3>
     <code class="snippet">
-      titanic_df["Survivor"] = titanic_df.Survived.map({0: "no", 1: "yes"})<br />
+      titanic_df['Survivor'] = titanic_df.Survived.map({0: 'no', 1: 'yes'})<br />
       sns.factorplot('Survivor', data=titanic_df, kind='count')
     </code>
     <img src="{{ url_for('static', filename='titanic/survival-rate.png') }}">
 
-    <p>What influenced the survival rate? Let's start by looking at the ticket class.</p>
+    <h3>How did the passenger class affect the survival rate?</h3>
     <code class="snippet">
       sns.factorplot('Pclass', 'Survived', data=titanic_df)
     </code>
     <img src="{{ url_for('static', filename='titanic/survival-class.png') }}">
-
     <p>
       Looks like higher your class, the more likely you were to survive. If you recall, the
       third class was mostly men. Did the "women and children first" policy influence this?
     </p>
+
+    <h3>What was the survival rate of each class by gender?</h3>
     <code class="snippet">
       sns.factorplot('Pclass', 'Survived', data=titanic_df, hue='Person')
     </code>
     <img src="{{ url_for('static', filename='titanic/survival-class-gender.png') }}">
+    <p>Doesn't look so hot for men or anyone in third class.</p>
 
-    <p>Doesn't look so hot for men or anyone in third class. Does passenger age make a difference?</p>
+    <h3>Does passenger age affect the survival rate?</h3>
     <code class="snippet">
       sns.lmplot('Age', 'Survived', data=titanic_df)
     </code>
     <img src="{{ url_for('static', filename='titanic/survival-age.png') }}">
 
-    <p>What if we throw class into the mix?</p>
+    <h3>What about age by class?</h3>
     <code class="snippet">
       sns.lmplot('Age', 'Survived', data=titanic_df, hue='Pclass', x_bins=[10, 20, 40, 60, 80], palette='winter')
     </code>
     <img src="{{ url_for('static', filename='titanic/survival-age-class.png') }}">
     <p>While there's quite a lot of variance, in general, it seems you're better off the younger you are.
 
-    <p>What's the difference in age by gender?</p>
+    <h3>What's the difference in age by gender?</h3>
     <code class="snippet">
       sns.lmplot('Age', 'Survived', data=titanic_df, hue='Sex', x_bins=[10, 20, 40, 60, 80], palette='winter')
     </code>
     <img src="{{ url_for('static', filename='titanic/survival-age-gender.png') }}">
+    <p>
+      Interesting. The older the woman, the more likely she was to survive. However, the
+      reverse is true for men, on average.
+    </p>
 
-    <p>What's the impact of having family members on board?</p>
+    <h3>What's the impact of having family members on board?</h3>
     <code class="snippet">
       sns.factorplot('Alone', 'Survived', data=titanic_df)
     </code>
     <img src="{{ url_for('static', filename='titanic/survival-family.png') }}">
 
-    <p>How did a passenger's deck level affect the survival rate?</p>
+    <h3>How did a passenger's deck level affect the survival rate?</h3>
     <code class="snippet">
       sns.factorplot('Deck', 'Survived', data=titanic_df, join=False)
     </code>

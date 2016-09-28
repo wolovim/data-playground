@@ -31,7 +31,7 @@ def build_titanic_demographics():
   plot_3.fig.savefig('static/titanic/class-with-child.png')
 
   # FacetGrid for age distribution by gender
-  plot_4 = sns.FacetGrid(titanic_df, hue="Sex",aspect=4)
+  plot_4 = sns.FacetGrid(titanic_df, hue='Sex',aspect=4)
   plot_4.map(sns.kdeplot, 'Age', shade=True)
   oldest = titanic_df['Age'].max()
   plot_4.set(xlim=(0,oldest))
@@ -39,7 +39,7 @@ def build_titanic_demographics():
   plot_4.fig.savefig('static/titanic/age-dist-gender.png')
 
   # Age distributions by class
-  plot_5 = sns.FacetGrid(titanic_df, hue="Pclass",aspect=4)
+  plot_5 = sns.FacetGrid(titanic_df, hue='Pclass',aspect=4)
   plot_5.map(sns.kdeplot, 'Age', shade=True)
   oldest = titanic_df['Age'].max()
   plot_5.set(xlim=(0,oldest))
@@ -62,7 +62,7 @@ def build_titanic_demographics():
   plot_7.fig.savefig('static/titanic/family.png')
 
   # Survival rate
-  titanic_df['Survivor'] = titanic_df.Survived.map({0: "no", 1: "yes"})
+  titanic_df['Survivor'] = titanic_df.Survived.map({0: 'no', 1: 'yes'})
   plot_8 = sns.factorplot('Survivor', data=titanic_df, kind='count')
   plot_8.fig.savefig('static/titanic/survival-rate.png')
 
