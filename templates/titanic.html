@@ -94,11 +94,7 @@
       ...<br />
       <br />
       deck = titanic_df['Cabin'].dropna()<br />
-      levels = []<br />
-      for level in deck:<br />
-      &nbsp;&nbsp;levels.append(level[0])<br />
-      <br />
-      cabin_df = DataFrame(levels)<br />
+      cabin_df = DataFrame([level[0] for level in deck])<br />
       cabin_df.columns = ['Cabin']<br />
       sns.factorplot('Cabin', data=cabin_df, kind='count', palette='winter_d')
     </code>

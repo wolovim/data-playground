@@ -48,10 +48,7 @@ def build_titanic_demographics():
 
   # Distribution by deck
   deck = titanic_df['Cabin'].dropna()
-  levels = []
-  for level in deck:
-    levels.append(level[0])
-  cabin_df = DataFrame(levels)
+  cabin_df = DataFrame([level[0] for level in deck])
   cabin_df.columns = ['Cabin']
   generations = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
   plot_6 = sns.factorplot('Cabin', data=cabin_df, order=generations, kind='count', palette='winter_d')
