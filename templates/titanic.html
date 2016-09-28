@@ -34,25 +34,25 @@
       </ul>
     </p>
 
-    <h3>Who were the passengers?</h3>
-    <p>
-      We'll use matplotlib and seaborn to shed some light on who was aboard the Titanic.
-      First, what was the gender breakdown?
-    </p>
+    <hr>
+    <p>So, who were the passengers?</p>
+
+    <h3>What's the gender breakdown?</h3>
     <code class="snippet">
       import seaborn as sns<br />
       sns.factorplot('Sex', data=titanic_df, kind='count')
     </code>
     <img src="{{ url_for('static', filename='titanic/gender.png') }}">
 
-    <p>
+    <h3>
       There were three classes of passengers aboard. How were the genders distributed across them?
-    </p>
+    </h3>
     <code class="snippet">
       sns.factorplot('Pclass', data=titanic_df, hue='Sex', kind='count', legend_out=False)
     </code>
     <img src="{{ url_for('static', filename='titanic/class.png') }}">
 
+    <h3>What's the distribution across classes if we include children?</h3>
     <p>
       In order to visualize how many children were on board, we'll add another column to identify
       the passenger as male, female or child, with children being anyone under the age of 16.
@@ -64,15 +64,15 @@
       <br /><br />
       titanic_df['Person'] = titanic_df[['Age', 'Sex']].apply(identify_children, axis=1)
     </code>
-    <p>To view the changes, we can display the first ten rows:</p>
+    <p>To view the changes to the DataFrame, we can display the first ten rows:</p>
     <code class="snippet">titanic_df[1:10]</code>
     {{ df[1:10].drop(['Alone', 'Survivor', 'Deck'], axis=1).to_html() | safe }}
     <p>Again, the same factorplot with the <code>hue</code> set to <code>Person</code>:</p>
     <img src="{{ url_for('static', filename='titanic/class-with-child.png') }}">
 
-    <p>Let's take a look at the age distribution of each group:</p>
+    <h3>What's the age distribution for men and women?</h3>
     <code class="snippet">
-      fig = sns.FacetGrid(titanic_df, hue="Person", aspect=4)<br />
+      fig = sns.FacetGrid(titanic_df, hue="Sex", aspect=4)<br />
       fig.map(sns.kdeplot, 'Age', shade=True)<br />
       oldest = titanic_df['Age'].max()<br />
       fig.set(xlim=(0, oldest))<br />
@@ -80,11 +80,11 @@
     </code>
     <img src="{{ url_for('static', filename='titanic/age-dist-gender.png') }}" width="100%">
 
-    <p>Similarly, we can view the age distribution by passenger class:</p>
+    <h3>What's the age distribution by passenger class?</h3>
     <img src="{{ url_for('static', filename='titanic/age-dist-class.png') }}" width="100%">
 
+    <h3>How many people stayed on each deck?</h3>
     <p>
-      We've got data on the deck that each passenger stayed on, so let's visualize that.
       Empty cabin values will have to get discarded, then we'll want to create a new DataFrame
       with just the letter value of the cabin.
     </p>
@@ -104,10 +104,10 @@
     </code>
     <img src="{{ url_for('static', filename='titanic/deck-dist.png') }}">
 
+    <h3>How many of the travelers had family on board?</h3>
     <p>
-      How many of the travelers had family on board?
-      If the Parch (parents/children) and SibSp (siblings/spouse) columns are zero, then
-      the traveler was alone:
+      If the <code>Parch</code> (parents/children) and <code>SibSp</code> (siblings/spouse)
+      columns are zero, then the traveler was alone:
     </p>
     <code class="snippet">
       titanic_df['Alone'] = titanic_df.Parch + titanic_df.SibSp<br />
@@ -117,7 +117,7 @@
     </code>
     <img src="{{ url_for('static', filename='titanic/family.png') }}">
 
-    <p>How many survivors were there?</p>
+    <h3>How many survivors were there?</h3>
     <code class="snippet">
       titanic_df["Survivor"] = titanic_df.Survived.map({0: "no", 1: "yes"})<br />
       sns.factorplot('Survivor', data=titanic_df, kind='count')

@@ -31,7 +31,7 @@ def build_titanic_demographics():
   plot_3.fig.savefig('static/titanic/class-with-child.png')
 
   # FacetGrid for age distribution by gender
-  plot_4 = sns.FacetGrid(titanic_df, hue="Person",aspect=4)
+  plot_4 = sns.FacetGrid(titanic_df, hue="Sex",aspect=4)
   plot_4.map(sns.kdeplot, 'Age', shade=True)
   oldest = titanic_df['Age'].max()
   plot_4.set(xlim=(0,oldest))
