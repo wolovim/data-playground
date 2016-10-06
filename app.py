@@ -1,7 +1,12 @@
+from __future__ import division
 from flask import Flask, render_template
 import pandas as pd
-from pandas import DataFrame
+from pandas import Series, DataFrame
+import matplotlib.pyplot as plt
 import seaborn as sns
+sns.set_style('whitegrid')
+from pandas.io.data import DataReader
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -10,6 +15,30 @@ titanic_df = pd.read_csv('./data/titanic-training-set.csv')
 @app.route('/')
 def index():
   return render_template('index.html')
+
+@app.route('/stocks')
+def stocks():
+  tickers = ['AAPL', 'GOOG', 'MSFT', 'AMZN']
+  end = datetime.now()
+  start = datetime(end.year-1, end.month, end.day)
+  for ticker in tickers:
+    globals()[ticker] = DataReader(ticker, 'yahoo', start, end)
+
+  build_stock_analyses()
+  return render_template('stocks.html', AAPL=AAPL, GOOG=GOOG, MSFT=MSFT, AMZN=AMZN)
+
+def build_stock_analyses():
+  # AAPL closing prices
+  plot_a = AAPL['Adj Close'].plot(legend=True)
+  plot_a.get_figure().savefig('static/stocks/apple-close.png')
+
+  # Moving Averages for AAPL
+  ma_day = [10, 20, 50]
+  for ma in ma_day:
+    column_name = "MA for %s days" %(str(ma))
+    AAPL[column_name] = pd.rolling_mean(AAPL['Adj Close'], ma)
+  plot_b = AAPL[['Adj Close', 'MA for 10 days', 'MA for 20 days', 'MA for 50 days']].plot(subplots=False)
+  plot_b.get_figure().savefig('static/stocks/apple-ma.png')
 
 @app.route('/titanic')
 def titanic():

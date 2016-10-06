@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block body %}
+  <div>
+    <h1>Stock Analysis</h1>
+
+    <code class="snippet">
+      from pandas.io.data import DataReader<br />
+      from datetime import datetime<br />
+      <br />
+      tickers = ['APPL', 'GOOG', 'MSFT', 'AMZN']<br />
+      end = datetime.now()<br />
+      start = datetime(end.year-1, end.month, end.day)<br />
+      for ticker in tickers:<br />
+      &nbsp;&nbsp;globals()[ticker] = DataReader(ticker, 'google', start, end)<br />
+      <br />
+      AAPL.head()
+    </code>
+    {{ AAPL.drop(['MA for 10 days', 'MA for 20 days', 'MA for 50 days'], axis=1).head().to_html() | safe }}
+
+    <code class="snippet">
+      AAPL['Adj Close'].plot(legend=True)
+    </code>
+    <img src="{{ url_for('static', filename='stocks/apple-close.png') }}">
+
+    <code class="snippet">
+      ma_day = [10, 20, 50]<br />
+      for ma in ma_day:<br />
+      &nbsp;&nbsp;column_name = "MA for %s days" %(str(ma))
+      &nbsp;&nbsp;AAPL[column_name] = pd.rolling_mean(AAPL['Adj Close'], ma)
+      <br />
+      AAPL[['Adj Close', 'MA for 10 days', 'MA for 20 days', 'MA for 50 days']].plot(subplots=False)
+    </code>
+    <img src="{{ url_for('static', filename='stocks/apple-ma.png') }}">
+  </div>
+{% endblock %}
