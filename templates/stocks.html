@@ -3,6 +3,14 @@
   <div>
     <h1>Stock Analysis</h1>
 
+    <p>
+      Here, I was following along with more of Jose Portilla's
+      <a href="https://www.udemy.com/learning-python-for-data-analysis-and-visualization/">
+      python data analysis course</a> on Udemy, but I got more excited for some machine
+      learning topics so I bailed early. The idea here is to use DataReader to pull some
+      stock quotes, then analyze their recent performances.
+    </p>
+
     <code class="snippet">
       from pandas.io.data import DataReader<br />
       from datetime import datetime<br />
@@ -11,25 +19,34 @@
       end = datetime.now()<br />
       start = datetime(end.year-1, end.month, end.day)<br />
       for ticker in tickers:<br />
-      &nbsp;&nbsp;globals()[ticker] = DataReader(ticker, 'google', start, end)<br />
+      &nbsp;&nbsp;globals()[ticker] = DataReader(ticker, 'yahoo', start, end)<br />
       <br />
       AAPL.head()
     </code>
     {{ AAPL.drop(['MA for 10 days', 'MA for 20 days', 'MA for 50 days'], axis=1).head().to_html() | safe }}
 
+    <h3>How's Apple's been doing?</h3>
     <code class="snippet">
       AAPL['Adj Close'].plot(legend=True)
     </code>
     <img src="{{ url_for('static', filename='stocks/apple-close.png') }}">
 
+    <h3>What do the moving averages look like?</h3>
     <code class="snippet">
       ma_day = [10, 20, 50]<br />
       for ma in ma_day:<br />
-      &nbsp;&nbsp;column_name = "MA for %s days" %(str(ma))
-      &nbsp;&nbsp;AAPL[column_name] = pd.rolling_mean(AAPL['Adj Close'], ma)
+      &nbsp;&nbsp;column_name = "MA for %s days" %(str(ma))<br />
+      &nbsp;&nbsp;AAPL[column_name] = pd.rolling_mean(AAPL['Adj Close'], ma)<br />
       <br />
       AAPL[['Adj Close', 'MA for 10 days', 'MA for 20 days', 'MA for 50 days']].plot(subplots=False)
     </code>
     <img src="{{ url_for('static', filename='stocks/apple-ma.png') }}">
+
+    <h3>What are the daily returns?</h3>
+    <code class="snippet">
+      AAPL['Daily Return'] = AAPL['Adj Close'].pct_change()<br />
+      plot_c = AAPL['Daily Return'].plot(legend=True)
+    </code>
+    <img src="{{ url_for('static', filename='stocks/apple-pct-change.png') }}">
   </div>
 {% endblock %}

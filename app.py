@@ -31,6 +31,7 @@ def build_stock_analyses():
   # AAPL closing prices
   plot_a = AAPL['Adj Close'].plot(legend=True)
   plot_a.get_figure().savefig('static/stocks/apple-close.png')
+  plt.close()
 
   # Moving Averages for AAPL
   ma_day = [10, 20, 50]
@@ -39,6 +40,13 @@ def build_stock_analyses():
     AAPL[column_name] = pd.rolling_mean(AAPL['Adj Close'], ma)
   plot_b = AAPL[['Adj Close', 'MA for 10 days', 'MA for 20 days', 'MA for 50 days']].plot(subplots=False)
   plot_b.get_figure().savefig('static/stocks/apple-ma.png')
+  plt.close()
+
+  # AAPL pct changes
+  AAPL['Daily Return'] = AAPL['Adj Close'].pct_change()
+  plot_c = AAPL['Daily Return'].plot(legend=True)
+  plot_c.get_figure().savefig('static/stocks/apple-pct-change.png')
+  plt.close()
 
 @app.route('/titanic')
 def titanic():
