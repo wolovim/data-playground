@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block body %}
+  <div>
+    <h1>Linear Regression</h1>
+    <p>
+      A hypothetical company wonders if it should focus its efforts on its
+      mobile or web app. We'll pull in and poke at some user data to get a
+      feel for what contributes to sales and where their effort might be
+      best utilized.
+    </p>
+
+    <img src="{{ url_for('static', filename='linear/joint-website.png') }}">
+    <img src="{{ url_for('static', filename='linear/joint-app.png') }}">
+    <img src="{{ url_for('static', filename='linear/joint-app-hex.png') }}">
+    <img src="{{ url_for('static', filename='linear/pairplot.png') }}">
+    <img src="{{ url_for('static', filename='linear/lm-membership.png') }}">
+    <img src="{{ url_for('static', filename='linear/fit.png') }}">
+    <img src="{{ url_for('static', filename='linear/residuals.png') }}">
+  </div>
+{% endblock %}
