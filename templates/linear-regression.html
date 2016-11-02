@@ -6,15 +6,59 @@
       A hypothetical company wonders if it should focus its efforts on its
       mobile or web app. We'll pull in and poke at some user data to get a
       feel for what contributes to sales and where their effort might be
-      best utilized.
+      best utilized. This exercise is part of Jose Portilla's
+      <a href="https://www.udemy.com/python-for-data-science-and-machine-learning-bootcamp/">
+      machine learning course</a>.
     </p>
 
+    <h3>So, what's the dataset look like?</h3>
+    <code class="snippet">
+      ecommerce_df = pd.read_csv('./data/ecommerce-customers.csv')<br />
+      ecommerce_df.head()
+    </code>
+    {{ df.head().to_html() | safe }}
+
+    <h3>What's the relationship between time spent on the website and spending?</h3>
+    <code class="snippet">
+      sns.jointplot('Time on Website', 'Yearly Amount Spent', data=ecommerce_df)
+    </code>
     <img src="{{ url_for('static', filename='linear/joint-website.png') }}">
+
+    <h3>How amount the relationship between time spent on the app and spending?</h3>
+    <code class="snippet">
+      sns.jointplot('Time on App', 'Yearly Amount Spent', data=ecommerce_df)
+    </code>
     <img src="{{ url_for('static', filename='linear/joint-app.png') }}">
+
+    <h3>Whats the correlation between time spent on the app and length of membership?</h3>
+    <code class="snippet">
+      sns.jointplot('Time on App', 'Length of Membership', data=ecommerce_df, kind='hex')
+    </code>
     <img src="{{ url_for('static', filename='linear/joint-app-hex.png') }}">
-    <img src="{{ url_for('static', filename='linear/pairplot.png') }}">
+
+    <h3>What other relationships exist in this data?</h3>
+    <code class="snippet">
+      sns.pairplot(ecommerce_df)
+    </code>
+    <img src="{{ url_for('static', filename='linear/pairplot.png') }}" width="100%">
+    <p>Yearly amount spent appears to correlate closely with length of membership.</p>
+
+    <h3>Howzabout a linear model to represent that relationship?</h3>
+    <code class="snippet">
+      sns.lmplot('Length of Membership', 'Yearly Amount Spent', data=ecommerce_df)
+    </code>
     <img src="{{ url_for('static', filename='linear/lm-membership.png') }}">
+
+    <h3>Whats the difference between the predictions and actual values?</h3>
+    <code class="snippet">
+      plt.scatter(y_test, predictions)
+    </code>
     <img src="{{ url_for('static', filename='linear/fit.png') }}">
+
+    <h3>The residuals ought to be normally distributed. Are they?</h3>
+    <code class="snippet">
+      sns.distplot((y_test-predictions), bins=50)
+    </code>
     <img src="{{ url_for('static', filename='linear/residuals.png') }}">
   </div>
 {% endblock %}
