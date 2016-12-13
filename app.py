@@ -12,12 +12,39 @@ from sklearn.linear_model import LinearRegression
 
 
 app = Flask(__name__)
+ad_df = pd.read_csv('./data/advertising.csv')
 ecommerce_df = pd.read_csv('./data/ecommerce-customers.csv')
 titanic_df = pd.read_csv('./data/titanic-training-set.csv')
 
 @app.route('/')
 def index():
   return render_template('index.html')
+
+@app.route('/logistic-regression')
+def logistic_regression():
+  build_advertising_analysis()
+  return render_template('logistic-regression.html', df=ad_df)
+
+def build_advertising_analysis():
+  # Age distribution
+  plot_1 = ad_df['Age'].hist(bins=30)
+  plot_1.get_figure().savefig('static/logistic/age-dist.png')
+  plt.close()
+
+  # Age / income relationship
+  plot_2 = sns.jointplot('Age', 'Area Income', data=ad_df)
+  plot_2.fig.savefig('static/logistic/age-income-joint.png')
+  plt.close()
+
+  # Age / internet usage relationship
+  plot_2 = sns.jointplot('Age', 'Daily Time Spent on Site', data=ad_df, kind='kde')
+  plot_2.fig.savefig('static/logistic/age-time-on-site-joint.png')
+  plt.close()
+
+  # Ad pairplot
+  plot_3 = sns.pairplot(ad_df, hue='Clicked on Ad')
+  plot_3.fig.savefig('static/logistic/pairplot.png')
+  plt.close()
 
 @app.route('/linear-regression')
 def linear_regression():

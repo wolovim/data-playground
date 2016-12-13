@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block body %}
+  <div>
+    <h1>Linear Regression</h1>
+    <p>
+      The goal here is to develop a model to predict whether a user will
+      click on a advertisement. This exercise is part of Jose Portilla's
+      <a href="https://www.udemy.com/python-for-data-science-and-machine-learning-bootcamp/">
+      machine learning course</a>.
+    </p>
+
+    <h3>So, what's the data look like?</h3>
+    <code class="snippet">
+      ad_df = pd.read_csv('./data/advertising.csv')<br />
+      ad_df.head()
+    </code>
+    {{ df.head().to_html() | safe }}
+
+    <code class="snippet">
+      ad_df.describe()
+    </code>
+    {{ df.describe().to_html() | safe }}
+
+    <h3>What's the age distribution of the users?</h3>
+    <code class="snippet">
+      ad_df['Age'].hist(bins=30)
+    </code>
+    <img src="{{ url_for('static', filename='logistic/age-dist.png') }}">
+
+    <h3>What's the relationship between age and income?</h3>
+    <code class="snippet">
+      sns.jointplot(x='Age', y='Area Income', data=ad_df)
+    </code>
+    <img src="{{ url_for('static', filename='logistic/age-income-joint.png') }}">
+
+    <h3>What's the relationship between time spent on the site and age?</h3>
+    <code class="snippet">
+      sns.jointplot(x='Age', y='Daily Time Spent on Site', data=ad_df, kind='kde')
+    </code>
+    <img src="{{ url_for('static', filename='logistic/age-time-on-site-joint.png') }}">
+
+    <h3>What other relationships exist in the data?</h3>
+    <code class="snippet">
+      sns.pairplot(ad_df, hue='Clicked on Ad')
+    </code>
+    <img width=100% src="{{ url_for('static', filename='logistic/pairplot.png') }}">
+  </div>
+{% endblock %}

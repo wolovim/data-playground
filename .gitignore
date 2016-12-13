@@ -1,4 +1,5 @@
 /static/linear/*
+/static/logistic/*
 /static/stocks/*
 /static/titanic/*
 .DS_Store
