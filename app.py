@@ -8,8 +8,8 @@ sns.set_style('whitegrid')
 from pandas.io.data import DataReader
 from datetime import datetime
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-
+from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.metrics import classification_report, confusion_matrix
 
 app = Flask(__name__)
 ad_df = pd.read_csv('./data/advertising.csv')
@@ -45,6 +45,16 @@ def build_advertising_analysis():
   plot_3 = sns.pairplot(ad_df, hue='Clicked on Ad')
   plot_3.fig.savefig('static/logistic/pairplot.png')
   plt.close()
+
+  # Build and train a logistic regression model
+  X = ad_df[['Daily Time Spent on Site', 'Age', 'Area Income', 'Daily Internet Usage', 'Male']]
+  y = ad_df['Clicked on Ad']
+  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+  logmodel = LogisticRegression()
+  logmodel.fit(X_train, y_train)
+  predictions = logmodel.predict(X_test)
+  # classification_report(y_test, predictions)
+  # confusion_matrix(y_test, predictions)
 
 @app.route('/linear-regression')
 def linear_regression():

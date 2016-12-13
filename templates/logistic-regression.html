@@ -44,5 +44,29 @@
       sns.pairplot(ad_df, hue='Clicked on Ad')
     </code>
     <img width=100% src="{{ url_for('static', filename='logistic/pairplot.png') }}">
+
+    <h3>Let's build the model</h3>
+    <code class="snippet">
+      from sklearn.cross_validation import train_test_split<br/>
+      X = ad_df[['Daily Time Spent on Site', 'Age', 'Area Income', 'Daily Internet Usage', 'Male']]</br>
+      y = ad_df['Clicked on Ad']<br/>
+      X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+    </code>
+
+    <h3>Let's train and fit a logistic regression model</h3>
+    <code class="snippet">
+      from sklearn.linearmodel import LogisticRegression<br/>
+      logmodel = LogisticRegression()<br/>
+      logmodel.fit(X_train, y_train)
+    </code>
+
+    <h3>Use the model to make predictions</h3>
+    <code class="snippet">
+      predictions = logmodel.predict(X_test)<br/><br/>
+
+      from sklearn.metrics import classification_report, confusion_matrix<br/>
+      print classification_report(y_test, predictions)<br/>
+      print confusion_matrix(y_test, predictions)
+    </code>
   </div>
 {% endblock %}
