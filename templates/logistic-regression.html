@@ -62,11 +62,20 @@
 
     <h3>Use the model to make predictions</h3>
     <code class="snippet">
-      predictions = logmodel.predict(X_test)<br/><br/>
-
-      from sklearn.metrics import classification_report, confusion_matrix<br/>
-      print classification_report(y_test, predictions)<br/>
-      print confusion_matrix(y_test, predictions)
+      predictions = logmodel.predict(X_test)
     </code>
+
+    <h3>How'd we do?</h3>
+    <code class="snippet">
+      from sklearn.metrics import classification_report, confusion_matrix<br/><br/>
+
+      # You can use a classification report to view accuracy data:<br/>
+      # print classification_report(y_test, predictions)<br/><br/>
+
+      # However, we'll just use a confusion matrix for the tl;dr:<br/>
+      print confusion_matrix(y_test, predictions)<br/>
+      #=> {{ c_matrix }}
+    </code>
+    <p>Not bad! Only 8 false positives and 15 false negatives were predicted.</p>
   </div>
 {% endblock %}

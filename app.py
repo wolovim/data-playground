@@ -22,8 +22,8 @@ def index():
 
 @app.route('/logistic-regression')
 def logistic_regression():
-  build_advertising_analysis()
-  return render_template('logistic-regression.html', df=ad_df)
+  c_matrix = build_advertising_analysis()
+  return render_template('logistic-regression.html', df=ad_df, c_matrix=c_matrix)
 
 def build_advertising_analysis():
   # Age distribution
@@ -49,12 +49,12 @@ def build_advertising_analysis():
   # Build and train a logistic regression model
   X = ad_df[['Daily Time Spent on Site', 'Age', 'Area Income', 'Daily Internet Usage', 'Male']]
   y = ad_df['Clicked on Ad']
-  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=101)
   logmodel = LogisticRegression()
   logmodel.fit(X_train, y_train)
   predictions = logmodel.predict(X_test)
   # classification_report(y_test, predictions)
-  # confusion_matrix(y_test, predictions)
+  return confusion_matrix(y_test, predictions)
 
 @app.route('/linear-regression')
 def linear_regression():
